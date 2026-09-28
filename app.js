@@ -28,6 +28,15 @@ const lessons = [
       }
     ],
     sql: "SELECT name, email\nFROM customers;",
+    output: {
+      columns: ["name", "email"],
+      rows: [
+        ["Alice Schmidt", "alice@example.de"],
+        ["David Kim", "david.k@example.com"],
+        ["Elena Rostova", "elena@techmail.org"],
+        ["Marcus Vance", "m.vance@worknet.io"]
+      ]
+    },
     quiz: [
       {
         prompt: "What does SQL primarily help you do?",
@@ -49,7 +58,7 @@ const lessons = [
           "A type of password"
         ],
         answer: 0,
-        explanation: "A row usually represents one record, such as one customer or one order."
+        explanation: "A row represents one distinct record, such as an individual customer or order."
       },
       {
         prompt: "Which statement is true?",
@@ -60,7 +69,7 @@ const lessons = [
           "SQL only reads data and cannot change it"
         ],
         answer: 0,
-        explanation: "Tables are made of rows and columns, and a database can contain many tables."
+        explanation: "Tables consist of rows and columns, and a single database can house hundreds of tables."
       }
     ]
   },
@@ -90,6 +99,16 @@ const lessons = [
       }
     ],
     sql: "SELECT id, product_name, price\nFROM products\nORDER BY price DESC\nLIMIT 5;",
+    output: {
+      columns: ["id", "product_name", "price"],
+      rows: [
+        [104, "UltraWide 4K Monitor", "$899.00"],
+        [218, "Mechanical Keyboard", "$210.00"],
+        [305, "Noise-Canceling Headset", "$185.00"],
+        [112, "Vertical Ergonomic Mouse", "$79.99"],
+        [401, "Thunderbolt 4 Dock", "$64.50"]
+      ]
+    },
     quiz: [
       {
         prompt: "What does SELECT do?",
@@ -111,7 +130,7 @@ const lessons = [
           "It is required by all SQL engines"
         ],
         answer: 2,
-        explanation: "Explicit columns improve readability and reduce unnecessary data retrieval."
+        explanation: "Explicit column selection improves network bandwidth, query clarity, and application stability."
       },
       {
         prompt: "Which clause sorts query results?",
@@ -122,7 +141,7 @@ const lessons = [
           "SORT"
         ],
         answer: 1,
-        explanation: "ORDER BY sorts rows by one or more columns."
+        explanation: "ORDER BY sorts rows by one or more columns ascending (ASC) or descending (DESC)."
       }
     ]
   },
@@ -152,6 +171,14 @@ const lessons = [
       }
     ],
     sql: "SELECT name, city\nFROM customers\nWHERE city = 'Berlin'\n  AND signup_year >= 2024;",
+    output: {
+      columns: ["name", "city"],
+      rows: [
+        ["Sophia Weber", "Berlin"],
+        ["Maximilian Braun", "Berlin"],
+        ["Lukas Wagner", "Berlin"]
+      ]
+    },
     quiz: [
       {
         prompt: "What is WHERE used for?",
@@ -162,18 +189,18 @@ const lessons = [
           "To create indexes"
         ],
         answer: 1,
-        explanation: "WHERE keeps only the rows that satisfy the condition."
+        explanation: "WHERE keeps only the rows that satisfy the specified condition."
       },
       {
-        prompt: "Which operator means 'not equal' in SQL?",
+        prompt: "Which operator means 'not equal' in standard SQL?",
         options: [
           "<>",
           "==",
           ":=",
-          "!="
+          "!!"
         ],
         answer: 0,
-        explanation: "<> is the standard SQL not-equal operator. Some systems also accept !=."
+        explanation: "<> is the ISO standard SQL not-equal operator (!= is also widely accepted)."
       },
       {
         prompt: "When should you use AND?",
@@ -184,7 +211,7 @@ const lessons = [
           "When selecting all rows"
         ],
         answer: 1,
-        explanation: "AND requires every connected condition to be true."
+        explanation: "AND requires that every connected condition evaluates to TRUE."
       }
     ]
   },
@@ -214,6 +241,14 @@ const lessons = [
       }
     ],
     sql: "SELECT department, COUNT(*) AS employees, AVG(salary) AS avg_salary\nFROM staff\nGROUP BY department\nHAVING COUNT(*) >= 5;",
+    output: {
+      columns: ["department", "employees", "avg_salary"],
+      rows: [
+        ["Engineering", 12, "$114,500"],
+        ["Product", 7, "$98,200"],
+        ["Sales", 9, "$84,100"]
+      ]
+    },
     quiz: [
       {
         prompt: "Which function counts rows?",
@@ -224,7 +259,7 @@ const lessons = [
           "GROUP()"
         ],
         answer: 1,
-        explanation: "COUNT() returns how many rows match."
+        explanation: "COUNT() returns the total number of matching rows."
       },
       {
         prompt: "What does GROUP BY do?",
@@ -235,10 +270,10 @@ const lessons = [
           "Prevents WHERE from working"
         ],
         answer: 2,
-        explanation: "GROUP BY creates grouped buckets so aggregates can be calculated per category."
+        explanation: "GROUP BY partitions rows into summary buckets so aggregates run per distinct category."
       },
       {
-        prompt: "Which clause filters grouped results?",
+        prompt: "Which clause filters aggregated/grouped results?",
         options: [
           "ORDER BY",
           "WHERE",
@@ -246,7 +281,7 @@ const lessons = [
           "LIMIT"
         ],
         answer: 2,
-        explanation: "HAVING applies after the grouping step."
+        explanation: "HAVING filters data after grouping and aggregate calculations take place."
       }
     ]
   },
@@ -276,6 +311,15 @@ const lessons = [
       }
     ],
     sql: "SELECT o.id, c.name, o.total_amount\nFROM orders AS o\nINNER JOIN customers AS c\n  ON o.customer_id = c.id;",
+    output: {
+      columns: ["id", "name", "total_amount"],
+      rows: [
+        [1001, "Alice Schmidt", "$349.50"],
+        [1002, "David Kim", "$1,220.00"],
+        [1003, "Alice Schmidt", "$85.00"],
+        [1004, "Elena Rostova", "$590.20"]
+      ]
+    },
     quiz: [
       {
         prompt: "What is a join used for?",
@@ -286,7 +330,7 @@ const lessons = [
           "To change SQL syntax rules"
         ],
         answer: 0,
-        explanation: "Joins bring together data from related tables using shared keys."
+        explanation: "Joins correlate data across separate tables using common relational keys."
       },
       {
         prompt: "What does INNER JOIN return?",
@@ -297,7 +341,7 @@ const lessons = [
           "Only rows with NULL values"
         ],
         answer: 1,
-        explanation: "INNER JOIN keeps only matching rows from each side."
+        explanation: "INNER JOIN keeps only rows where the join predicate finds a match in both tables."
       },
       {
         prompt: "What happens in a LEFT JOIN when there is no match on the right table?",
@@ -308,7 +352,7 @@ const lessons = [
           "The database creates a new row automatically"
         ],
         answer: 2,
-        explanation: "LEFT JOIN preserves the left row and fills unmatched right-side columns with NULL."
+        explanation: "LEFT JOIN preserves the left record and fills any missing right-side attributes with NULL."
       }
     ]
   },
@@ -338,17 +382,25 @@ const lessons = [
       }
     ],
     sql: "WITH top_customers AS (\n  SELECT customer_id, SUM(total_amount) AS total_spend\n  FROM orders\n  GROUP BY customer_id\n)\nSELECT customer_id, total_spend\nFROM top_customers\nWHERE total_spend > 5000;",
+    output: {
+      columns: ["customer_id", "total_spend"],
+      rows: [
+        [42, "$8,420.00"],
+        [109, "$6,150.00"],
+        [254, "$5,890.50"]
+      ]
+    },
     quiz: [
       {
         prompt: "What is a subquery?",
         options: [
           "A type of index",
-          "A query inside another query",
+          "A query nested inside another query",
           "A backup script",
           "A database user"
         ],
         answer: 1,
-        explanation: "A subquery is nested inside another query."
+        explanation: "A subquery is any query written inside another surrounding SQL statement."
       },
       {
         prompt: "What keyword starts a Common Table Expression?",
@@ -359,18 +411,18 @@ const lessons = [
           "CTE"
         ],
         answer: 2,
-        explanation: "CTEs begin with WITH."
+        explanation: "CTEs are defined starting with the WITH keyword."
       },
       {
         prompt: "Why might you choose a CTE?",
         options: [
           "It always stores data permanently",
-          "It can make complex logic easier to read",
+          "It can make complex nested logic readable and clean",
           "It replaces SELECT completely",
           "It disables GROUP BY"
         ],
         answer: 1,
-        explanation: "CTEs are often chosen for readability and maintainability."
+        explanation: "CTEs clarify multi-step queries by breaking them into named, logical building blocks."
       }
     ]
   },
@@ -400,6 +452,16 @@ const lessons = [
       }
     ],
     sql: "SELECT employee_id, department, salary,\n  RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank\nFROM staff;",
+    output: {
+      columns: ["employee_id", "department", "salary", "dept_rank"],
+      rows: [
+        [14, "Engineering", "$135,000", 1],
+        [8, "Engineering", "$128,000", 2],
+        [22, "Engineering", "$115,000", 3],
+        [31, "Sales", "$98,000", 1],
+        [19, "Sales", "$92,000", 2]
+      ]
+    },
     quiz: [
       {
         prompt: "What makes a window function different from GROUP BY?",
@@ -410,10 +472,10 @@ const lessons = [
           "It removes the need for SELECT"
         ],
         answer: 0,
-        explanation: "Window functions preserve row-level detail while adding analytic calculations."
+        explanation: "Window functions retain original row granularity while computing running or grouped calculations."
       },
       {
-        prompt: "Which clause can divide a window into groups?",
+        prompt: "Which clause can divide a window into subgroups?",
         options: [
           "HAVING",
           "PARTITION BY",
@@ -421,10 +483,10 @@ const lessons = [
           "UNION"
         ],
         answer: 1,
-        explanation: "PARTITION BY breaks the window into separate groups."
+        explanation: "PARTITION BY segregates the row window into distinct subgroups for calculations."
       },
       {
-        prompt: "Which function can assign a ranking to rows?",
+        prompt: "Which function can assign an ordered ranking to rows?",
         options: [
           "RANK()",
           "DROP()",
@@ -432,7 +494,7 @@ const lessons = [
           "GROUP()"
         ],
         answer: 0,
-        explanation: "RANK() is a standard window function for ordered ranking."
+        explanation: "RANK() calculates rank based on the ORDER BY sequence in the window specification."
       }
     ]
   },
@@ -462,6 +524,12 @@ const lessons = [
       }
     ],
     sql: "CREATE INDEX idx_orders_customer_date\nON orders (customer_id, order_date);",
+    output: {
+      columns: ["command", "target_table", "indexed_columns", "status"],
+      rows: [
+        ["CREATE INDEX", "orders", "customer_id, order_date", "SUCCESS (B-Tree generated)"]
+      ]
+    },
     quiz: [
       {
         prompt: "Why do indexes exist?",
@@ -472,7 +540,7 @@ const lessons = [
           "To make backups smaller"
         ],
         answer: 1,
-        explanation: "Indexes are mainly about faster lookup and access paths."
+        explanation: "Indexes speed up lookups by providing direct pointers rather than scanning entire tables."
       },
       {
         prompt: "What is a common cost of adding many indexes?",
@@ -483,7 +551,7 @@ const lessons = [
           "Rows cannot contain numbers"
         ],
         answer: 0,
-        explanation: "Write operations can slow down because indexes must also be updated."
+        explanation: "Write operations cost more because each insert/update must also update index trees."
       },
       {
         prompt: "Which columns are often good index candidates?",
@@ -494,7 +562,7 @@ const lessons = [
           "Only columns with very long text"
         ],
         answer: 0,
-        explanation: "Columns commonly used in WHERE, JOIN, and ORDER BY can benefit from indexing."
+        explanation: "Columns frequently used in WHERE conditions, JOIN clauses, and ORDER BY benefit most."
       }
     ]
   },
@@ -524,6 +592,15 @@ const lessons = [
       }
     ],
     sql: "WITH customer_order_totals AS (\n  SELECT c.id, c.name, COALESCE(SUM(o.total_amount), 0) AS total_spend\n  FROM customers c\n  LEFT JOIN orders o ON c.id = o.customer_id\n  GROUP BY c.id, c.name\n)\nSELECT *\nFROM customer_order_totals\nORDER BY total_spend DESC;",
+    output: {
+      columns: ["id", "name", "total_spend"],
+      rows: [
+        [109, "Acme Corp", "$18,450.00"],
+        [42, "Nexus Media", "$8,420.00"],
+        [254, "Hyperion Dynamics", "$5,890.50"],
+        [311, "Global Logistics", "$0.00"]
+      ]
+    },
     quiz: [
       {
         prompt: "What is a common source of silent SQL bugs?",
@@ -534,7 +611,7 @@ const lessons = [
           "Reviewing sample outputs"
         ],
         answer: 1,
-        explanation: "NULL handling and duplicate rows from joins often create subtle logic bugs."
+        explanation: "Unnoticed NULL propagation and unintentional duplicate rows created in joins cause silent errors."
       },
       {
         prompt: "Which habit supports trustworthy SQL work?",
@@ -545,7 +622,7 @@ const lessons = [
           "Avoiding aliases entirely"
         ],
         answer: 2,
-        explanation: "Validation is a core habit for reliable SQL results."
+        explanation: "Validating counts, edge cases, and sanity checks guarantees data integrity."
       },
       {
         prompt: "What does COALESCE help with?",
@@ -556,7 +633,7 @@ const lessons = [
           "Deleting duplicate rows"
         ],
         answer: 1,
-        explanation: "COALESCE returns the first non-NULL value from its arguments."
+        explanation: "COALESCE returns the first non-NULL value among its evaluated arguments."
       }
     ]
   }
@@ -565,38 +642,44 @@ const lessons = [
 const achievements = [
   {
     id: "first-review",
+    icon: "📖",
     title: "Warm-Up Win",
-    description: "Review your first lesson.",
+    description: "Review your first lesson notes.",
     isUnlocked: (state) => state.reviewedLessons.length >= 1
   },
   {
     id: "first-pass",
+    icon: "⚡",
     title: "Quiz Crusher",
-    description: "Pass your first lesson test.",
+    description: "Pass your first checkpoint quiz.",
     isUnlocked: (state) => state.completedLessons.length >= 1
   },
   {
     id: "beginner-track",
+    icon: "🌱",
     title: "Beginner Cleared",
-    description: "Finish every easy lesson.",
+    description: "Finish every Easy tier lesson.",
     isUnlocked: (state) => completeDifficulty(state, "Easy")
   },
   {
     id: "intermediate-track",
+    icon: "🚀",
     title: "Intermediate Momentum",
-    description: "Finish every intermediate lesson.",
+    description: "Master all Intermediate lessons.",
     isUnlocked: (state) => completeDifficulty(state, "Intermediate")
   },
   {
     id: "advanced-track",
+    icon: "👑",
     title: "Advanced Finisher",
-    description: "Finish every advanced lesson.",
+    description: "Conquer the entire Advanced curriculum.",
     isUnlocked: (state) => completeDifficulty(state, "Advanced")
   },
   {
     id: "xp-master",
+    icon: "💎",
     title: "XP Machine",
-    description: "Reach 1000 XP.",
+    description: "Accumulate 1,000+ total XP.",
     isUnlocked: (state) => state.xp >= 1000
   }
 ];
@@ -615,7 +698,7 @@ const initialState = {
   lastActionDay: null
 };
 
-const state = loadState();
+let state = loadState();
 
 const elements = {
   lessonGroups: document.getElementById("lesson-groups"),
@@ -638,6 +721,11 @@ const elements = {
   lessonObjectives: document.getElementById("lesson-objectives"),
   lessonContent: document.getElementById("lesson-content"),
   lessonSql: document.getElementById("lesson-sql"),
+  copySqlBtn: document.getElementById("copy-sql-btn"),
+  runSqlBtn: document.getElementById("run-sql-btn"),
+  sqlOutputContainer: document.getElementById("sql-output-container"),
+  sqlOutputMeta: document.getElementById("sql-output-meta"),
+  sqlOutputTable: document.getElementById("sql-output-table"),
   quizForm: document.getElementById("quiz-form"),
   quizQuestions: document.getElementById("quiz-questions"),
   quizResult: document.getElementById("quiz-result"),
@@ -652,9 +740,7 @@ const elements = {
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (!saved) {
-      return { ...initialState };
-    }
+    if (!saved) return { ...initialState };
     return normalizeState(saved);
   } catch (error) {
     return { ...initialState };
@@ -691,18 +777,14 @@ function getProgressPercent() {
 }
 
 function getLessonStatus(lessonId) {
-  if (state.completedLessons.includes(lessonId)) {
-    return "Mastered";
-  }
-  if (state.reviewedLessons.includes(lessonId)) {
-    return "In Progress";
-  }
+  if (state.completedLessons.includes(lessonId)) return "Mastered";
+  if (state.reviewedLessons.includes(lessonId)) return "In Progress";
   return "Not Started";
 }
 
 function completeDifficulty(currentState, difficulty) {
   const matching = lessons.filter((lesson) => lesson.difficulty === difficulty);
-  return matching.every((lesson) => currentState.completedLessons.includes(lesson.id));
+  return matching.length > 0 && matching.every((lesson) => currentState.completedLessons.includes(lesson.id));
 }
 
 function renderLessonGroups() {
@@ -715,12 +797,9 @@ function renderLessonGroups() {
 
     const title = document.createElement("div");
     title.className = "lesson-group-title";
-    const total = lessons.filter((lesson) => lesson.difficulty === difficulty).length;
-    const done = lessons.filter((lesson) =>
-      lesson.difficulty === difficulty && state.completedLessons.includes(lesson.id)
-    ).length;
+    const total = lessons.filter((l) => l.difficulty === difficulty).length;
+    const done = lessons.filter((l) => l.difficulty === difficulty && state.completedLessons.includes(l.id)).length;
     title.innerHTML = `<span>${difficulty}</span><span>${done}/${total}</span>`;
-
     group.appendChild(title);
 
     lessons
@@ -743,19 +822,20 @@ function renderLessonGroups() {
           render();
         });
 
-        const titleRow = document.createElement("div");
-        titleRow.className = "lesson-nav-title";
-        const strong = document.createElement("strong");
-        strong.textContent = `${index + 1}. ${lesson.title}`;
-        const status = document.createElement("span");
-        status.textContent = getLessonStatus(lesson.id);
-        titleRow.append(strong, status);
+        const statusText = getLessonStatus(lesson.id);
+        const statusClass = statusText === "Mastered" ? "mastered" : (statusText === "In Progress" ? "in-progress" : "");
 
-        const metaRow = document.createElement("div");
-        metaRow.className = "lesson-nav-meta";
-        metaRow.innerHTML = `<span>${lesson.duration}</span><span>+${lesson.rewardXp} XP</span>`;
+        button.innerHTML = `
+          <div class="lesson-nav-title">
+            <strong>${index + 1}. ${lesson.title}</strong>
+            <span class="lesson-status-tag ${statusClass}">${statusText}</span>
+          </div>
+          <div class="lesson-nav-meta">
+            <span>⏱️ ${lesson.duration}</span>
+            <span>+${lesson.rewardXp} XP</span>
+          </div>
+        `;
 
-        button.append(titleRow, metaRow);
         group.appendChild(button);
       });
 
@@ -767,14 +847,22 @@ function renderCurrentLesson() {
   const lesson = getCurrentLesson();
   const quizResult = state.quizResults[lesson.id];
 
-  elements.lessonDifficulty.textContent = lesson.difficulty;
+  elements.lessonDifficulty.textContent = `${lesson.difficulty} Module`;
   elements.lessonTitle.textContent = lesson.title;
-  elements.lessonStatus.textContent = getLessonStatus(lesson.id);
-  elements.lessonDuration.textContent = lesson.duration;
-  elements.lessonReward.textContent = `+${lesson.rewardXp} XP`;
-  elements.lessonGoal.textContent = `${lesson.quiz.length} quiz questions`;
+
+  const status = getLessonStatus(lesson.id);
+  elements.lessonStatus.textContent = status;
+  elements.lessonStatus.className = `status-chip ${status === "Mastered" ? "mastered" : (status === "In Progress" ? "in-progress" : "faint")}`;
+
+  elements.lessonDuration.textContent = `⏱️ ${lesson.duration}`;
+  elements.lessonReward.textContent = `✨ +${lesson.rewardXp} XP`;
+  elements.lessonGoal.textContent = `📝 ${lesson.quiz.length} Questions`;
   elements.lessonSql.textContent = lesson.sql;
 
+  // Reset Query Sandbox Output
+  elements.sqlOutputContainer.classList.add("hidden");
+
+  // Objectives
   elements.lessonObjectives.innerHTML = "";
   lesson.objectives.forEach((objective) => {
     const item = document.createElement("li");
@@ -782,6 +870,7 @@ function renderCurrentLesson() {
     elements.lessonObjectives.appendChild(item);
   });
 
+  // Notes
   elements.lessonContent.innerHTML = "";
   lesson.notes.forEach((note) => {
     const wrap = document.createElement("div");
@@ -822,7 +911,13 @@ function renderQuiz(lesson, previousResult) {
 
       if (previousResult?.answers?.[questionIndex] === optionIndex) {
         input.checked = true;
+        label.classList.add("selected");
       }
+
+      input.addEventListener("change", () => {
+        wrapper.querySelectorAll(".quiz-option").forEach((opt) => opt.classList.remove("selected"));
+        if (input.checked) label.classList.add("selected");
+      });
 
       const span = document.createElement("span");
       span.textContent = optionText;
@@ -836,7 +931,7 @@ function renderQuiz(lesson, previousResult) {
 
   if (previousResult) {
     const percent = Math.round((previousResult.score / lesson.quiz.length) * 100);
-    elements.quizScorePill.textContent = `${percent}% last score`;
+    elements.quizScorePill.textContent = `${percent}% Last Score`;
     elements.quizScorePill.classList.remove("faint");
     showQuizResult(previousResult, lesson);
   } else {
@@ -847,6 +942,45 @@ function renderQuiz(lesson, previousResult) {
   }
 }
 
+function runCurrentQuery() {
+  const lesson = getCurrentLesson();
+  if (!lesson.output) return;
+
+  const startTime = (Math.random() * 8 + 3).toFixed(1);
+  elements.sqlOutputMeta.textContent = `${lesson.output.rows.length} rows returned in ${startTime}ms`;
+
+  let tableHtml = '<table class="query-table"><thead><tr>';
+  lesson.output.columns.forEach((col) => {
+    tableHtml += `<th>${col}</th>`;
+  });
+  tableHtml += "</tr></thead><tbody>";
+
+  lesson.output.rows.forEach((row) => {
+    tableHtml += "<tr>";
+    row.forEach((cell) => {
+      tableHtml += `<td>${cell}</td>`;
+    });
+    tableHtml += "</tr>";
+  });
+  tableHtml += "</tbody></table>";
+
+  elements.sqlOutputTable.innerHTML = tableHtml;
+  elements.sqlOutputContainer.classList.remove("hidden");
+  showRewardToast("Query executed successfully against sample dataset.");
+}
+
+function copyCurrentSql() {
+  const lesson = getCurrentLesson();
+  navigator.clipboard.writeText(lesson.sql).then(() => {
+    const copyBtnSpan = elements.copySqlBtn.querySelector("span");
+    const originalText = copyBtnSpan.textContent;
+    copyBtnSpan.textContent = "Copied!";
+    setTimeout(() => {
+      copyBtnSpan.textContent = originalText;
+    }, 1800);
+  });
+}
+
 function renderStats() {
   const progressPercent = getProgressPercent();
   elements.lessonsCompleteCopy.textContent = `${state.completedLessons.length}/${lessons.length} done`;
@@ -854,18 +988,18 @@ function renderStats() {
   elements.courseProgressBar.style.width = `${progressPercent}%`;
   elements.playerLevel.textContent = String(state.level);
   elements.playerXp.textContent = String(state.xp);
-  elements.playerStreak.textContent = `${state.streak} day`;
+  elements.playerStreak.textContent = `${state.streak} ${state.streak === 1 ? "day" : "days"}`;
   elements.playerBadges.textContent = String(state.badges.length);
 
   const nextLesson = getNextLesson();
   if (nextLesson) {
     elements.heroTitle.textContent = `Next Up: ${nextLesson.title}`;
-    elements.heroDescription.textContent = `Keep your streak alive and earn +${nextLesson.rewardXp} XP by completing the next SQL checkpoint.`;
-    elements.continueButton.textContent = "Jump To Next Lesson";
+    elements.heroDescription.textContent = `Earn +${nextLesson.rewardXp} XP and reinforce your momentum by conquering this checkpoint.`;
+    elements.continueButton.textContent = "Continue Journey";
   } else {
-    elements.heroTitle.textContent = "You Finished SQL Quest";
-    elements.heroDescription.textContent = "Every lesson is complete. Revisit anything, improve quiz scores, and keep the habit going.";
-    elements.continueButton.textContent = "Review Mastered Lessons";
+    elements.heroTitle.textContent = "🎉 Quest Completed!";
+    elements.heroDescription.textContent = "You've conquered every lesson from SQL basics to advanced indexing & query architecture.";
+    elements.continueButton.textContent = "Review All Lessons";
   }
 }
 
@@ -878,14 +1012,14 @@ function renderAchievements() {
     const card = document.createElement("div");
     card.className = `achievement-card ${unlocked ? "unlocked" : ""}`;
 
-    const title = document.createElement("strong");
-    title.textContent = `${unlocked ? "Unlocked" : "Locked"}: ${achievement.title}`;
+    card.innerHTML = `
+      <div class="achievement-icon">${achievement.icon || "🏆"}</div>
+      <div>
+        <strong>${achievement.title}</strong>
+        <p class="muted">${achievement.description}</p>
+      </div>
+    `;
 
-    const body = document.createElement("p");
-    body.className = "muted";
-    body.textContent = achievement.description;
-
-    card.append(title, body);
     elements.achievementList.appendChild(card);
   });
 }
@@ -903,9 +1037,7 @@ function getTodayKey() {
 
 function updateStreak() {
   const todayKey = getTodayKey();
-  if (state.lastActionDay === todayKey) {
-    return false;
-  }
+  if (state.lastActionDay === todayKey) return false;
 
   if (!state.lastActionDay) {
     state.streak = 1;
@@ -934,25 +1066,27 @@ function rewardXp(amount, sourceCopy) {
   const leveledUp = state.level > previousLevel;
   const toastLines = [`+${amount} XP`, sourceCopy];
   if (leveledUp) {
-    toastLines.push(`Level up! You reached level ${state.level}.`);
+    toastLines.push(`🎉 Level Up! You reached Level ${state.level}!`);
   }
   if (state.streak > 1) {
-    toastLines.push(`Streak alive: ${state.streak} days.`);
+    toastLines.push(`🔥 Streak: ${state.streak} days!`);
   }
 
-  showRewardToast(toastLines.join(" "));
+  showRewardToast(toastLines.join(" • "));
   emitSparks();
 }
 
 function unlockAchievements() {
+  let changed = false;
   achievements.forEach((achievement) => {
     if (!state.badges.includes(achievement.id) && achievement.isUnlocked(state)) {
       state.badges.push(achievement.id);
-      showRewardToast(`Badge unlocked: ${achievement.title}`);
+      showRewardToast(`🏆 Badge Unlocked: ${achievement.title}`);
       emitSparks();
+      changed = true;
     }
   });
-  saveState();
+  if (changed) saveState();
 }
 
 function showRewardToast(message) {
@@ -961,22 +1095,22 @@ function showRewardToast(message) {
   clearTimeout(showRewardToast.timer);
   showRewardToast.timer = setTimeout(() => {
     elements.rewardToast.className = "reward-toast hidden";
-  }, 2300);
+  }, 2600);
 }
 
 function emitSparks() {
   elements.sparkLayer.innerHTML = "";
-  const colors = ["#7c5cff", "#21d4c7", "#ffb648", "#36d98a", "#eef4ff"];
+  const colors = ["#7c5cff", "#21d4c7", "#ffb648", "#36d98a", "#f0f5ff"];
 
-  for (let index = 0; index < 24; index += 1) {
+  for (let i = 0; i < 28; i++) {
     const spark = document.createElement("span");
     spark.className = "spark";
-    spark.style.left = `${50 + (Math.random() * 14 - 7)}%`;
-    spark.style.top = `${55 + (Math.random() * 12 - 6)}%`;
-    spark.style.background = colors[index % colors.length];
-    spark.style.setProperty("--x", `${Math.random() * 180 - 90}px`);
-    spark.style.setProperty("--y", `${Math.random() * -180 + 90}px`);
-    spark.style.animationDelay = `${Math.random() * 120}ms`;
+    spark.style.left = `${50 + (Math.random() * 20 - 10)}%`;
+    spark.style.top = `${55 + (Math.random() * 20 - 10)}%`;
+    spark.style.background = colors[i % colors.length];
+    spark.style.setProperty("--x", `${Math.random() * 260 - 130}px`);
+    spark.style.setProperty("--y", `${Math.random() * -240 + 60}px`);
+    spark.style.animationDelay = `${Math.random() * 100}ms`;
     elements.sparkLayer.appendChild(spark);
   }
 
@@ -994,10 +1128,10 @@ function markLessonReviewed() {
 
   if (!state.awardedReviewXp.includes(lesson.id)) {
     state.awardedReviewXp.push(lesson.id);
-    rewardXp(40, `Lesson reviewed: ${lesson.title}`);
+    rewardXp(40, `Lesson Notes Reviewed: ${lesson.title}`);
   } else {
     saveState();
-    showRewardToast("Lesson already reviewed. Progress saved.");
+    showRewardToast("Lesson already reviewed. Progress saved!");
   }
 
   render();
@@ -1017,16 +1151,14 @@ function submitQuiz(event) {
   const answers = getSelectedAnswers();
 
   if (answers.some((answer) => answer === null)) {
-    showRewardToast("Answer every question before submitting the quiz.");
+    showRewardToast("⚠️ Please answer all questions before submitting.");
     return;
   }
 
   let score = 0;
   const details = lesson.quiz.map((question, index) => {
     const correct = answers[index] === question.answer;
-    if (correct) {
-      score += 1;
-    }
+    if (correct) score += 1;
     return {
       prompt: question.prompt,
       correct,
@@ -1049,10 +1181,10 @@ function submitQuiz(event) {
 
   if (passed && !state.awardedQuizXp.includes(lesson.id)) {
     state.awardedQuizXp.push(lesson.id);
-    rewardXp(lesson.rewardXp, `Quiz cleared: ${lesson.title}`);
+    rewardXp(lesson.rewardXp, `Quiz Cleared: ${lesson.title}`);
   } else {
     saveState();
-    showRewardToast(passed ? "Quiz already cleared. Score saved." : "Nice attempt. Review the lesson and try again.");
+    showRewardToast(passed ? "Checkpoint completed! Score saved." : "Nice try! Review the notes and try again.");
   }
 
   render();
@@ -1062,17 +1194,29 @@ function showQuizResult(result, lesson) {
   const percent = Math.round((result.score / lesson.quiz.length) * 100);
   elements.quizResult.className = `quiz-result ${result.passed ? "success" : "retry"}`;
 
-  const summary = document.createElement("p");
-  summary.innerHTML = `<strong>Score:</strong> ${result.score}/${lesson.quiz.length} (${percent}%)`;
-  elements.quizResult.innerHTML = "";
-  elements.quizResult.appendChild(summary);
+  let html = `
+    <div class="result-header">
+      <span>${result.passed ? "🎉 Checkpoint Cleared!" : "📚 Practice Needed"}</span>
+      <strong>${result.score}/${lesson.quiz.length} (${percent}%)</strong>
+    </div>
+  `;
 
-  result.details.forEach((detail) => {
-    const item = document.createElement("p");
-    item.className = "muted";
-    item.textContent = `${detail.correct ? "Correct" : "Review"} - ${detail.prompt} Selected: ${detail.selectedOption}. Right answer: ${detail.correctOption}. ${detail.explanation}`;
-    elements.quizResult.appendChild(item);
+  result.details.forEach((detail, idx) => {
+    html += `
+      <div class="result-card ${detail.correct ? "is-correct" : "is-incorrect"}">
+        <div class="result-header">
+          <span>Question ${idx + 1}: ${detail.correct ? "✅ Correct" : "❌ Incorrect"}</span>
+        </div>
+        <div class="result-feedback">
+          <p><strong>Your answer:</strong> ${detail.selectedOption}</p>
+          ${!detail.correct ? `<p><strong>Correct answer:</strong> ${detail.correctOption}</p>` : ""}
+          <p class="muted">${detail.explanation}</p>
+        </div>
+      </div>
+    `;
   });
+
+  elements.quizResult.innerHTML = html;
 }
 
 function getNextLesson() {
@@ -1084,23 +1228,26 @@ function continueLearning() {
   state.currentLessonId = nextLesson.id;
   saveState();
   render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function resetProgress() {
-  const confirmed = window.confirm("Reset all saved SQL Quest progress?");
-  if (!confirmed) {
-    return;
-  }
+  const confirmed = window.confirm("Reset all saved SQL Quest progress and streak?");
+  if (!confirmed) return;
 
-  Object.assign(state, { ...initialState });
+  state = { ...initialState };
   saveState();
-  showRewardToast("Progress reset. Fresh run started.");
+  showRewardToast("Progress has been reset. Fresh start initiated!");
   render();
 }
 
+// Event Listeners
 elements.quizForm.addEventListener("submit", submitQuiz);
 elements.markReviewed.addEventListener("click", markLessonReviewed);
 elements.continueButton.addEventListener("click", continueLearning);
 elements.resetProgress.addEventListener("click", resetProgress);
+elements.runSqlBtn.addEventListener("click", runCurrentQuery);
+elements.copySqlBtn.addEventListener("click", copyCurrentSql);
 
+// Initial Load
 render();
