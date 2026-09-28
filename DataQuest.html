@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataQuest — Data Analytics Study Lab</title>
+<style>
+:root{
+  --bg:#0b1020;--panel:#121a2f;--panel2:#18223b;--text:#f5f7ff;--muted:#9aa7c4;
+  --accent:#7c5cff;--accent2:#19d3ae;--gold:#ffc857;--danger:#ff647c;--line:#283553;
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at top right,#1b2550 0,#0b1020 45%);color:var(--text)}
+button{font:inherit;cursor:pointer;border:0}.app{display:flex;min-height:100vh}
+.sidebar{width:260px;background:rgba(10,15,30,.92);border-right:1px solid var(--line);padding:22px 16px;position:fixed;inset:0 auto 0 0;overflow:auto}
+.logo{font-size:24px;font-weight:900;margin:4px 10px 25px}.logo span{color:var(--accent2)}
+.profile{background:linear-gradient(135deg,#1c2850,#151d34);padding:16px;border:1px solid var(--line);border-radius:18px;margin-bottom:18px}
+.avatar{width:45px;height:45px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#b58cff);display:grid;place-items:center;font-weight:900}
+.profile-row{display:flex;gap:12px;align-items:center}.level{font-size:13px;color:var(--gold);font-weight:800}
+.xpbar{height:7px;background:#0c1325;border-radius:10px;margin-top:8px;overflow:hidden}.xpfill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.4s}
+.nav button{display:block;width:100%;text-align:left;background:transparent;color:var(--muted);padding:12px 13px;border-radius:12px;margin:4px 0;font-weight:700}
+.nav button:hover,.nav button.active{background:#1b2745;color:white}.nav button.active{box-shadow:inset 3px 0 var(--accent)}
+.main{margin-left:260px;width:calc(100% - 260px);padding:30px;max-width:1500px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:25px}.eyebrow{color:var(--accent2);font-weight:800;text-transform:uppercase;letter-spacing:1.5px;font-size:12px}
+h1{font-size:34px;margin:5px 0} h2{margin:0 0 14px} h3{margin:8px 0}.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:rgba(18,26,47,.86);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 12px 30px rgba(0,0,0,.16)}
+.stat strong{font-size:29px;display:block}.stat small{color:var(--muted)}.icon{font-size:26px;margin-bottom:10px}
+.section{margin-top:26px}.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.course{position:relative;overflow:hidden;min-height:190px;display:flex;flex-direction:column;justify-content:space-between}
+.course:after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:var(--course,#7c5cff);opacity:.13;right:-35px;top:-35px}
+.course-top{display:flex;justify-content:space-between}.tag{font-size:11px;font-weight:900;padding:5px 9px;border-radius:99px;background:#202c4b;color:#cbd5ef}
+.progress{height:8px;background:#0b1223;border-radius:99px;overflow:hidden;margin:12px 0}.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--course,#7c5cff),#19d3ae);width:0}
+.course button,.primary{background:linear-gradient(135deg,var(--accent),#9a72ff);color:white;padding:10px 15px;border-radius:11px;font-weight:800}
+.secondary{background:#202b48;color:white;padding:10px 15px;border-radius:11px;font-weight:800}.danger{color:var(--danger)}
+.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}.table th{color:var(--muted);font-size:12px}
+.lesson-wrap{max-width:900px;margin:auto}.lesson-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.lesson-content{line-height:1.75;color:#dce3f5}.lesson-content code{background:#080e1c;padding:2px 6px;border-radius:6px;color:#a9f7e8}.lesson-content pre{background:#080e1c;border:1px solid var(--line);padding:16px;border-radius:14px;overflow:auto}
+.quiz-option{display:block;width:100%;padding:14px;margin:10px 0;background:#18233d;border:1px solid var(--line);border-radius:12px;color:white;text-align:left}
+.quiz-option:hover{border-color:#6f84c0}.quiz-option.selected{border-color:var(--accent);background:#242f52}.quiz-option.correct{border-color:var(--accent2);background:#123b36}.quiz-option.wrong{border-color:var(--danger);background:#3a1d2a}
+.reward{display:flex;align-items:center;gap:18px;padding:18px;background:linear-gradient(135deg,#202b52,#172b34);border:1px solid #365b60;border-radius:18px;margin:18px 0}.reward .big{font-size:48px}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.badge{padding:18px;text-align:center;border-radius:17px;background:#151e35;border:1px solid var(--line);opacity:.4}.badge.unlocked{opacity:1;border-color:#6554bd;background:linear-gradient(145deg,#211d42,#162b37)}.badge .emoji{font-size:38px}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.toast{position:fixed;right:25px;bottom:25px;background:#18253f;border:1px solid #405276;padding:14px 18px;border-radius:14px;box-shadow:0 15px 35px #0008;transform:translateY(120px);transition:.35s;z-index:20}.toast.show{transform:translateY(0)}
+.empty{text-align:center;padding:45px;color:var(--muted)}.streak{color:var(--gold)}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.course-grid{grid-template-columns:repeat(2,1fr)}.badges{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.sidebar{position:static;width:100%;height:auto}.app{display:block}.main{margin:0;width:100%;padding:18px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.profile{display:none}.course-grid,.grid{grid-template-columns:1fr}.top{display:block}.top button{margin-top:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">Data<span>Quest</span> ⚡</div>
+  <div class="profile">
+    <div class="profile-row"><div class="avatar">DQ</div><div><b>Data Explorer</b><div class="level" id="sideLevel">Level 1</div></div></div>
+    <div class="xpbar"><div class="xpfill" id="sideXP"></div></div>
+    <small class="muted" id="sideXPText">0 / 100 XP</small>
+  </div>
+  <nav class="nav">
+    <button class="active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
+    <button onclick="showPage('courses',this)">📚 Courses</button>
+    <button onclick="showPage('achievements',this)">🏆 Achievements</button>
+    <button onclick="showPage('stats',this)">📊 My Progress</button>
+    <button onclick="showPage('settings',this)">⚙️ Settings</button>
+  </nav>
+</aside>
+
+<main class="main" id="main"></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const courses=[
+ {id:'sql',name:'SQL',icon:'🗄️',color:'#4f8cff',desc:'Query, filter, join and analyze relational data.',levels:['Easy','Intermediate','Advanced']},
+ {id:'excel',name:'Excel',icon:'📗',color:'#20b87a',desc:'Turn spreadsheets into clean, useful analysis.',levels:['Easy','Intermediate','Advanced']},
+ {id:'powerbi',name:'Power BI',icon:'📈',color:'#f3b51b',desc:'Build dashboards, models and interactive reports.',levels:['Easy','Intermediate','Advanced']},
+ {id:'python',name:'Python',icon:'🐍',color:'#4c9be8',desc:'Use Python to clean, explore and transform data.',levels:['Easy','Intermediate','Advanced']},
+ {id:'stats',name:'Basic Statistics',icon:'📐',color:'#c56cff',desc:'Understand distributions, averages, probability and inference.',levels:['Easy','Intermediate','Advanced']},
+ {id:'story',name:'Data Storytelling',icon:'🎤',color:'#ff6b8a',desc:'Communicate insights clearly with evidence and visuals.',levels:['Easy','Intermediate','Advanced']},
+ {id:'analysis',name:'Data Analysis',icon:'🔎',color:'#19c6a3',desc:'Combine your skills into a repeatable analyst workflow.',levels:['Easy','Intermediate','Advanced']}
+];
+
+const lessons=[
+ {id:'sql1',course:'sql',level:'Easy',title:'Your First SELECT',mins:8,xp:30,body:`<p>SQL is a language for asking a database questions. A <b>table</b> is similar to a spreadsheet: it has rows and columns.</p><p>The basic pattern is:</p><pre>SELECT column_name\nFROM table_name;</pre><p>To get every column, use <code>*</code>. To get only rows that match a condition, add <code>WHERE</code>.</p><pre>SELECT name, salary\nFROM employees\nWHERE salary &gt; 30000;</pre><p><b>Analyst mindset:</b> always ask what data you need before writing the query.</p>`,q:[['Which keyword chooses columns?',['SELECT','FROM','WHERE','ORDER'],0],['Which clause filters rows?',['GROUP BY','WHERE','SELECT','JOIN'],1]]},
+ {id:'sql2',course:'sql',level:'Easy',title:'Sorting & Filtering',mins:10,xp:35,body:`<p>Use <code>ORDER BY</code> to sort results. <code>ASC</code> is ascending and <code>DESC</code> is descending.</p><pre>SELECT product, sales\nFROM orders\nWHERE sales &gt; 1000\nORDER BY sales DESC;</pre><p>You can combine conditions with <code>AND</code>, <code>OR</code>, and <code>NOT</code>.</p>`,q:[['How do you sort highest to lowest?',['ASC','DESC','HIGH','DOWN'],1],['What filters records?',['ORDER BY','WHERE','FROM','AS'],1]]},
+ {id:'sql3',course:'sql',level:'Intermediate',title:'GROUP BY & Aggregations',mins:12,xp:45,body:`<p>Aggregations turn many rows into useful summaries. Common functions are <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, and <code>MAX</code>.</p><pre>SELECT department, AVG(salary) AS avg_salary\nFROM employees\nGROUP BY department;</pre><p><code>GROUP BY</code> creates one result row per group.</p>`,q:[['Which function calculates an average?',['SUM','AVG','COUNT','MAX'],1],['Why use GROUP BY?',['Delete duplicates','Create summaries by group','Rename columns','Sort rows'],1]]},
+ {id:'sql4',course:'sql',level:'Advanced',title:'JOINs & Business Questions',mins:16,xp:60,body:`<p>Real databases spread information across tables. A <b>JOIN</b> combines related records.</p><pre>SELECT c.customer_name, SUM(o.amount) AS total\nFROM customers c\nJOIN orders o ON c.customer_id = o.customer_id\nGROUP BY c.customer_name;</pre><p>When analyzing data, translate the business question into: <b>grain → tables → relationship → filters → metric → validation</b>.</p>`,q:[['What connects rows in a typical JOIN?',['A related key','A chart','A formula','A worksheet'],0],['What should you define before a metric?',['Font size','Data grain','Color palette','File name'],1]]},
+
+ {id:'excel1',course:'excel',level:'Easy',title:'Formulas & Cell References',mins:9,xp:30,body:`<p>Excel formulas start with <code>=</code>. Basic functions include <code>SUM</code>, <code>AVERAGE</code>, <code>MIN</code>, and <code>MAX</code>.</p><pre>=SUM(B2:B20)\n=AVERAGE(C2:C20)</pre><p><b>Relative</b> references change when copied. <b>Absolute</b> references such as <code>$B$2</code> stay fixed.</p>`,q:[['What symbol starts an Excel formula?',['#','=',':','@'],1],['Which reference stays fixed when copied?',['B2','$B$2','B:B','2B'],1]]},
+ {id:'excel2',course:'excel',level:'Easy',title:'Cleaning Spreadsheet Data',mins:10,xp:35,body:`<p>Before analysis, clean inconsistent text, blanks and duplicates. Useful tools include <b>TRIM</b>, <b>PROPER</b>, <b>Remove Duplicates</b>, filters, and tables.</p><pre>=TRIM(A2)</pre><p>A clean dataset should have consistent headers, sensible data types and one observation per row.</p>`,q:[['Which function removes extra spaces?',['CLEAN','TRIM','SPACE','FIX'],1],['What is a good row structure?',['One observation per row','Multiple unrelated records per row','Only totals','Merged cells everywhere'],0]]},
+ {id:'excel3',course:'excel',level:'Intermediate',title:'Pivot Tables & Lookups',mins:14,xp:45,body:`<p>PivotTables quickly summarize data by dimensions and measures. Lookups connect information from one table to another.</p><pre>=XLOOKUP(E2,Customers[ID],Customers[Name],"Not found")</pre><p>Use a PivotTable when you want to explore totals by category, month, region or another dimension.</p>`,q:[['What is a PivotTable mainly for?',['Writing code','Summarizing data','Compressing files','Changing fonts'],1],['Which function is a modern lookup?',['XLOOKUP','COUNT','ROUND','TEXTJOIN'],0]]},
+ {id:'excel4',course:'excel',level:'Advanced',title:'Analytical Models',mins:18,xp:60,body:`<p>Advanced spreadsheet analysis combines clean tables, assumptions, formulas, validation and scenario thinking. Separate <b>inputs</b>, <b>calculations</b>, and <b>outputs</b>.</p><p>Use conditional logic, structured references, dynamic arrays and charts carefully. A model is useful only if another person can audit it.</p>`,q:[['What should be separated in a good model?',['Inputs, calculations, outputs','Random sheets','Only colors','Charts and errors'],0],['Why validate a model?',['To make it prettier','To catch incorrect assumptions or calculations','To increase file size','To hide formulas'],1]]},
+
+ {id:'powerbi1',course:'powerbi',level:'Easy',title:'Power BI Foundations',mins:10,xp:30,body:`<p>Power BI has three big ideas: <b>Get data</b>, <b>Model data</b>, and <b>Visualize/share insights</b>.</p><p>Power Query is commonly used for data transformation. The model stores relationships and measures used by reports.</p>`,q:[['Where is data transformation commonly done?',['Power Query','Paint','Notepad','BIOS'],0],['What connects related tables?',['Relationships','Themes','Bookmarks','Images'],0]]},
+ {id:'powerbi2',course:'powerbi',level:'Intermediate',title:'Data Models & DAX',mins:16,xp:50,body:`<p>A strong Power BI model often uses a star schema: a central <b>fact</b> table surrounded by descriptive <b>dimension</b> tables.</p><pre>Total Sales = SUM(Sales[Amount])</pre><p>DAX measures calculate results in filter context. Understanding context is more important than memorizing functions.</p>`,q:[['What is at the center of a star schema?',['Fact table','Logo','Slicer only','Dashboard title'],0],['What language creates Power BI measures?',['SQL','DAX','HTML','CSS'],1]]},
+ {id:'powerbi3',course:'powerbi',level:'Advanced',title:'Interactive Executive Dashboard',mins:20,xp:65,body:`<p>A useful dashboard starts with a decision, not a chart. Choose KPIs that answer the decision, then add breakdowns for diagnosis.</p><p>Use drill-through, tooltips, bookmarks and carefully chosen visuals. Avoid visual noise and duplicated metrics.</p>`,q:[['What should guide dashboard design?',['A decision or question','Maximum number of charts','Random colors','Animation'],0],['What helps users investigate a category in detail?',['Drill-through','Spellcheck','Page margins','File compression'],0]]},
+
+ {id:'python1',course:'python',level:'Easy',title:'Python for Data Basics',mins:10,xp:30,body:`<p>Python stores information in variables. Lists hold sequences, dictionaries hold key-value pairs, and functions package reusable logic.</p><pre>sales = [120, 80, 150]\ntotal = sum(sales)\nprint(total)</pre><p>For data work, learn core Python first, then libraries such as pandas and NumPy.</p>`,q:[['Which structure stores key-value pairs?',['List','Dictionary','Tuple only','String'],1],['Which function adds numbers in a list?',['sum','join','sortby','totalize'],0]]},
+ {id:'python2',course:'python',level:'Intermediate',title:'Pandas DataFrames',mins:15,xp:50,body:`<p>Pandas provides the <code>DataFrame</code>, a table-like structure for analysis.</p><pre>import pandas as pd\ndf = pd.read_csv("sales.csv")\ndf.groupby("region")["sales"].sum()</pre><p>Common operations include filtering, grouping, merging, missing-value handling and creating calculated columns.</p>`,q:[['What is a DataFrame?',['A table-like data structure','A database server','A chart only','A Python error'],0],['Which method groups rows?',['groupby','splitrows','pivotcode','cluster'],0]]},
+ {id:'python3',course:'python',level:'Advanced',title:'Reusable Analysis Pipeline',mins:20,xp:65,body:`<p>A robust analysis script separates loading, cleaning, validation, transformation and reporting. Functions make the workflow reusable.</p><p>Always inspect row counts, data types, missing values and duplicates after important transformations.</p>`,q:[['What should you inspect after transformations?',['Row counts and data quality','Only the title','Keyboard layout','Screen brightness'],0],['Why use functions?',['Reuse and organize logic','Make code longer','Hide errors','Avoid variables'],0]]},
+
+ {id:'stats1',course:'stats',level:'Easy',title:'Mean, Median & Mode',mins:9,xp:30,body:`<p>The <b>mean</b> is the arithmetic average. The <b>median</b> is the middle value after sorting. The <b>mode</b> is the most frequent value.</p><p>Median is often more resistant to extreme values than mean.</p>`,q:[['Which is more resistant to outliers?',['Median','Mean','Mode always','Sum'],0],['What is the mean?',['Largest value','Arithmetic average','Middle value only','Most frequent value'],1]]},
+ {id:'stats2',course:'stats',level:'Easy',title:'Spread & Distributions',mins:11,xp:35,body:`<p>Range, variance and standard deviation describe spread. A distribution shows how values are arranged.</p><p>Standard deviation measures typical distance from the mean in the same units as the data.</p>`,q:[['What does standard deviation describe?',['Spread','Color','Causation','Sample size only'],0],['A histogram mainly shows what?',['Distribution of numeric values','Database keys','Code quality','Relationships between tables'],0]]},
+ {id:'stats3',course:'stats',level:'Intermediate',title:'Correlation & Probability',mins:14,xp:45,body:`<p>Correlation describes association between variables. A correlation does <b>not</b> by itself prove causation.</p><p>Probability measures how likely an event is. Always define the population/sample and context before interpreting a statistic.</p>`,q:[['Does correlation prove causation?',['Yes','No','Only with a bar chart','Always'],1],['Probability describes what?',['Likelihood of an event','Font size','Average only','Database size'],0]},
+ {id:'stats4',course:'stats',level:'Advanced',title:'Sampling & Hypothesis Tests',mins:18,xp:65,body:`<p>Statistical inference uses samples to learn about populations. Sampling bias can undermine conclusions.</p><p>A hypothesis test compares data with a null-model assumption. A p-value is not the probability that the null hypothesis is true.</p>`,q:[['What can bias a sample?',['A non-representative selection process','A clear definition','Randomization','Enough documentation'],0],['What is a p-value NOT?',['Probability the null is true','A measure used in hypothesis testing','Evidence interpreted under a null model','A calculated statistic'],0]]},
+
+ {id:'story1',course:'story',level:'Easy',title:'Find the One Big Message',mins:8,xp:30,body:`<p>Data storytelling turns analysis into a clear message. Start with the audience and decision.</p><p>A simple structure is <b>Context → Insight → Evidence → Action</b>. Do not make the audience hunt for the point.</p>`,q:[['What comes first in the suggested structure?',['Context','Action','Decorations','Raw code'],0],['Who should shape your story?',['The audience and decision','The chart software','The file size','The database engine'],0]]},
+ {id:'story2',course:'story',level:'Intermediate',title:'Choose the Right Chart',mins:12,xp:45,body:`<p>Use charts based on the question. Lines are useful for trends, bars for category comparisons, and scatter plots for relationships between two numeric variables.</p><p>Remove unnecessary decoration so the data signal is easier to see.</p>`,q:[['Which chart is usually useful for a time trend?',['Line chart','Pie chart only','Random scatter','Table border'],0],['What should be reduced?',['Unnecessary visual noise','Data labels when useful','Clear titles','Useful annotations'],0]]},
+ {id:'story3',course:'story',level:'Advanced',title:'Executive Narrative',mins:17,xp:60,body:`<p>An executive narrative should connect KPI movement to business meaning, uncertainty and next actions. Distinguish facts from hypotheses.</p><p>Use annotations to point to the important change, then explain possible drivers and what should be investigated next.</p>`,q:[['What should you distinguish?',['Facts and hypotheses','Rows and columns only','Blue and green','Titles and footers'],0],['What should an executive story end with?',['A clear implication or next action','More unexplained charts','Raw database dumps','A hidden conclusion'],0]]},
+
+ {id:'analysis1',course:'analysis',level:'Easy',title:'The Analyst Workflow',mins:10,xp:35,body:`<p>A repeatable workflow is: <b>Understand → Collect → Clean → Explore → Analyze → Communicate → Act</b>.</p><p>The hardest part is often defining the question correctly. A technically perfect analysis can still be useless if it answers the wrong question.</p>`,q:[['What comes before analysis?',['A clear question and clean data','A random chart','A conclusion','A dashboard theme'],0],['Why define the question?',['To ensure the analysis answers the right problem','To make SQL shorter only','To avoid charts','To increase file size'],0]]},
+ {id:'analysis2',course:'analysis',level:'Intermediate',title:'EDA: Explore Before You Explain',mins:15,xp:50,body:`<p>Exploratory Data Analysis (EDA) helps you understand distributions, missingness, outliers, relationships and unexpected patterns.</p><p>Use summary statistics and visualizations together. Investigate surprising values before telling a story.</p>`,q:[['What is a key purpose of EDA?',['Discover patterns and data-quality issues','Publish a conclusion immediately','Avoid validation','Hide outliers'],0],['What should you investigate?',['Unexpected patterns and values','Only the average','Only the first row','Nothing surprising'],0]]},
+ {id:'analysis3',course:'analysis',level:'Advanced',title:'End-to-End Case Study',mins:22,xp:75,body:`<p>For a portfolio-grade project, document the business question, data source, cleaning decisions, analysis, assumptions, findings and recommendations.</p><p>Reproducibility matters: another person should be able to understand how you reached the result.</p>`,q:[['What makes an analysis reproducible?',['Clear documented steps and assumptions','A screenshot only','A hidden formula','No source information'],0],['What should a recommendation connect to?',['Evidence and the business question','Personal preference only','Chart colors','Unrelated metrics'],0]]}
+];
+
+const defaultState={xp:0,streak:0,lastStudy:null,completed:[],quizScores:{},badges:[],dailyXP:0,lastDaily:null};
+let state=JSON.parse(localStorage.getItem('dataquest_state')||'null')||defaultState;
+function save(){localStorage.setItem('dataquest_state',JSON.stringify(state));updateSide()}
+function level(){return Math.floor(state.xp/100)+1}
+function levelXP(){return state.xp%100}
+function completedCount(){return state.completed.length}
+function pct(course){let ls=lessons.filter(x=>x.course===course.id);return Math.round(ls.filter(x=>state.completed.includes(x.id)).length/ls.length*100)}
+function updateSide(){document.getElementById('sideLevel').textContent='Level '+level();document.getElementById('sideXP').style.width=levelXP()+'%';document.getElementById('sideXPText').textContent=`${levelXP()} / 100 XP`}
+function toast(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function awardXP(amount,reason){state.xp+=amount;toast(`✨ +${amount} XP — ${reason}`);checkBadges();save()}
+function markStudy(){let today=new Date().toISOString().slice(0,10);if(state.lastStudy!==today){if(state.lastStudy){let a=new Date(state.lastStudy),b=new Date(today);let d=(b-a)/86400000;state.streak=d===1?state.streak+1:1}else state.streak=1;state.lastStudy=today;}}
+function checkBadges(){
+ const b=[];
+ if(completedCount()>=1)b.push('first');
+ if(completedCount()>=5)b.push('five');
+ if(completedCount()>=10)b.push('ten');
+ if(completedCount()>=20)b.push('twenty');
+ if(courses.every(c=>pct(c)>0))b.push('all');
+ if(state.streak>=3)b.push('streak');
+ const newB=b.filter(x=>!state.badges.includes(x)); if(newB.length){state.badges.push(...newB);setTimeout(()=>toast('🏆 New badge unlocked!'),300)}
+}
+function showPage(page,btn){
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active')); if(btn)btn.classList.add('active');
+ const main=document.getElementById('main');
+ if(page==='dashboard')main.innerHTML=dashboard();
+ if(page==='courses')main.innerHTML=coursesPage();
+ if(page==='achievements')main.innerHTML=achievements();
+ if(page==='stats')main.innerHTML=statsPage();
+ if(page==='settings')main.innerHTML=settingsPage();
+ updateSide();
+}
+function dashboard(){
+ let total=lessons.length,done=completedCount(),overall=Math.round(done/total*100);
+ return `<div class="top"><div><div class="eyebrow">Your analytics learning lab</div><h1>Keep the streak alive. 🔥</h1><p class="muted">Learn → test → earn XP → level up → repeat.</p></div><button class="primary" onclick="continueLearning()">▶ Continue Learning</button></div>
+ <div class="grid">
+  <div class="card stat"><div class="icon">⚡</div><strong>${state.xp}</strong><small>Total XP</small></div>
+  <div class="card stat"><div class="icon">🔥</div><strong class="streak">${state.streak}</strong><small>Day streak</small></div>
+  <div class="card stat"><div class="icon">🎯</div><strong>${done}/${total}</strong><small>Lessons completed</small></div>
+  <div class="card stat"><div class="icon">🏆</div><strong>${state.badges.length}</strong><small>Badges unlocked</small></div>
+ </div>
+ <div class="section"><h2>Learning map</h2><div class="course-grid">${courses.map(courseCard).join('')}</div></div>
+ <div class="section card"><h2>🎮 Your next milestone</h2><p class="muted">${done===0?'Complete your first lesson to unlock your first badge.':done<5?`${5-done} more lesson${5-done>1?'s':''} until the “5 Lessons” badge.`:overall<100?`${100-overall}% of the curriculum remains. Pick a course and keep going!`:'You completed the entire core curriculum. Legendary. 🏆'}</p><div class="progress"><i style="width:${overall}%"></i></div><b>${overall}% curriculum complete</b></div>`;
+}
+function courseCard(c){
+ let p=pct(c);return `<div class="card course" style="--course:${c.color}"><div><div class="course-top"><span style="font-size:30px">${c.icon}</span><span class="tag">${p}%</span></div><h3>${c.name}</h3><p class="muted">${c.desc}</p></div><div><div class="progress"><i style="width:${p}%"></i></div><button onclick="openCourse('${c.id}')">${p?'Continue':'Start course'} →</button></div></div>`
+}
+function coursesPage(){return `<div class="top"><div><div class="eyebrow">Curriculum</div><h1>Choose your skill</h1><p class="muted">Each topic progresses from Easy → Intermediate → Advanced.</p></div></div><div class="course-grid">${courses.map(courseCard).join('')}</div>`}
+function openCourse(id){
+ let c=courses.find(x=>x.id===id),ls=lessons.filter(x=>x.course===id);
+ document.getElementById('main').innerHTML=`<div class="top"><div><div class="eyebrow">${c.icon} ${c.name}</div><h1>${c.name} Path</h1><p class="muted">${c.desc}</p></div><button class="secondary" onclick="showPage('courses')">← All courses</button></div>
+ <div class="card">${ls.map((l,i)=>`<div class="settings-row"><div><span class="tag">${l.level}</span><h3>${state.completed.includes(l.id)?'✅ ':''}${l.title}</h3><small class="muted">${l.mins} min • +${l.xp} XP • ${l.q.length} question quiz</small></div><button class="${state.completed.includes(l.id)?'secondary':'primary'}" onclick="startLesson('${l.id}')">${state.completed.includes(l.id)?'Review':'Start'} →</button></div>`).join('')}</div>`;
+}
+let currentLesson=null,answers=[];
+function startLesson(id){
+ currentLesson=lessons.find(x=>x.id===id);answers=[];renderLesson(false);
+}
+function renderLesson(quiz){
+ let l=currentLesson;
+ if(!quiz){document.getElementById('main').innerHTML=`<div class="lesson-wrap"><div class="lesson-head"><div><span class="tag">${l.level}</span><h1>${l.title}</h1><span class="muted">⏱ ${l.mins} min • ⚡ ${l.xp} XP</span></div><button class="secondary" onclick="openCourse('${l.course}')">Exit</button></div><div class="card lesson-content">${l.body}</div><div style="display:flex;justify-content:flex-end;margin-top:16px"><button class="primary" onclick="renderLesson(true)">Take lesson test →</button></div></div>`}
+ else {document.getElementById('main').innerHTML=`<div class="lesson-wrap"><div class="lesson-head"><div><div class="eyebrow">Checkpoint</div><h1>🧠 ${l.title} Test</h1><p class="muted">Pass with at least 70%. You can retry if needed.</p></div></div><div class="card">${l.q.map((q,i)=>`<div style="margin-bottom:25px"><h3>${i+1}. ${q[0]}</h3>${q[1].map((o,j)=>`<button class="quiz-option" id="q${i}_${j}" onclick="pick(${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join('')}</div>`).join('')}<button class="primary" onclick="submitQuiz()">Submit test 🚀</button></div></div>`}
+}
+function pick(i,j){answers[i]=j;document.querySelectorAll(`[id^="q${i}_"]`).forEach(b=>b.classList.remove('selected'));document.getElementById(`q${i}_${j}`).classList.add('selected')}
+function submitQuiz(){
+ if(answers.length<currentLesson.q.length || answers.some(x=>x===undefined)){toast('⚠️ Answer every question first.');return}
+ let correct=0;currentLesson.q.forEach((q,i)=>{if(answers[i]===q[2])correct++;document.getElementById(`q${i}_${q[2]}`).classList.add('correct');if(answers[i]!==q[2])document.getElementById(`q${i}_${answers[i]}`).classList.add('wrong')});
+ let score=Math.round(correct/currentLesson.q.length*100);state.quizScores[currentLesson.id]=Math.max(state.quizScores[currentLesson.id]||0,score);markStudy();
+ if(score>=70){
+   let fresh=!state.completed.includes(currentLesson.id);
+   if(fresh){state.completed.push(currentLesson.id);awardXP(currentLesson.xp,'Lesson completed!')}else save();
+   document.querySelector('.card').insertAdjacentHTML('afterbegin',`<div class="reward"><div class="big">${score>=90?'🏆':score>=80?'🔥':'✅'}</div><div><h2>${score>=90?'Excellent!':score>=80?'Great work!':'Passed!'}</h2><p class="muted">Score: <b>${score}%</b>. ${fresh?'You earned '+currentLesson.xp+' XP.':'Your previous completion is already counted for XP.'}</p></div></div>`);
+   checkBadges();save();
+ }else{
+   document.querySelector('.card').insertAdjacentHTML('afterbegin',`<div class="reward"><div class="big">💪</div><div><h2>Not quite yet</h2><p class="muted">Score: <b>${score}%</b>. Review the lesson and try again.</p></div></div>`);
+ }
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function continueLearning(){
+ let next=lessons.find(l=>!state.completed.includes(l.id))||lessons[0];startLesson(next.id)
+}
+function achievements(){
+ const bs=[
+  ['first','🌱','First Step','Complete 1 lesson'],
+  ['five','🔥','Getting Serious','Complete 5 lessons'],
+  ['ten','⚡','Momentum','Complete 10 lessons'],
+  ['twenty','🚀','Data Grinder','Complete 20 lessons'],
+  ['all','🧠','Full Stack Analyst','Touch every subject'],
+  ['streak','🔥','Consistency','Maintain a 3-day streak']
+ ];
+ return `<div class="top"><div><div class="eyebrow">Rewards</div><h1>Achievements 🏆</h1><p class="muted">Small wins compound into real skill.</p></div></div><div class="badges">${bs.map(b=>`<div class="badge ${state.badges.includes(b[0])?'unlocked':''}"><div class="emoji">${b[1]}</div><h3>${b[2]}</h3><small class="muted">${b[3]}</small></div>`).join('')}</div><div class="section card"><h2>🎮 Gamification rules</h2><p class="muted">Complete lessons to earn XP. Pass each checkpoint at 70%+. Your best quiz score is saved. XP raises your level every 100 points. Progress is saved automatically in this browser.</p></div>`;
+}
+function statsPage(){
+ return `<div class="top"><div><div class="eyebrow">Analytics on your learning</div><h1>My Progress 📊</h1><p class="muted">Treat your learning like a dataset.</p></div></div>
+ <div class="grid"><div class="card stat"><strong>Level ${level()}</strong><small>${levelXP()} XP into next level</small></div><div class="card stat"><strong>${completedCount()}</strong><small>Lessons passed</small></div><div class="card stat"><strong>${state.streak} 🔥</strong><small>Current streak</small></div><div class="card stat"><strong>${Object.keys(state.quizScores).length}</strong><small>Tests attempted</small></div></div>
+ <div class="section card"><h2>Course completion</h2><table class="table"><tr><th>Course</th><th>Level</th><th>Progress</th><th>Status</th></tr>${courses.map(c=>{let p=pct(c),done=lessons.filter(l=>l.course===c.id&&state.completed.includes(l.id)).length;return `<tr><td>${c.icon} ${c.name}</td><td>${done<2?'Easy':done<3?'Intermediate':'Advanced'}</td><td><div class="progress"><i style="width:${p}%"></i></div></td><td>${p===100?'🏆 Complete':p+'%'}</td></tr>`}).join('')}</table></div>
+ <div class="section card"><h2>Quiz performance</h2><table class="table"><tr><th>Lesson</th><th>Best score</th></tr>${Object.entries(state.quizScores).map(([id,s])=>`<tr><td>${lessons.find(l=>l.id===id)?.title||id}</td><td>${s}%</td></tr>`).join('')||'<tr><td colspan="2" class="muted">No tests attempted yet.</td></tr>'}</table></div>`;
+}
+function settingsPage(){
+ return `<div class="top"><div><div class="eyebrow">Control center</div><h1>Settings ⚙️</h1><p class="muted">Your progress is stored locally in your browser.</p></div></div>
+ <div class="card"><div class="settings-row"><div><b>Saved progress</b><p class="muted">XP, completions, quiz scores, streak and badges are saved automatically.</p></div><span>💾</span></div>
+ <div class="settings-row"><div><b>Export progress</b><p class="muted">Download a JSON backup of your progress.</p></div><button class="secondary" onclick="exportData()">Export</button></div>
+ <div class="settings-row"><div><b>Import progress</b><p class="muted">Restore a previously exported JSON file.</p></div><button class="secondary" onclick="document.getElementById('importFile').click()">Import</button></div>
+ <div class="settings-row"><div><b class="danger">Reset all progress</b><p class="muted">This cannot be undone unless you have an export backup.</p></div><button class="secondary" onclick="resetData()">Reset</button></div></div>
+ <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">`;
+}
+function exportData(){
+ let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='dataquest-progress.json';a.click();URL.revokeObjectURL(a.href);toast('💾 Progress exported')}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.completed)||typeof x.xp!=='number')throw Error();state={...defaultState,...x};save();showPage('dashboard');toast('✅ Progress imported')}catch{toast('❌ Invalid progress file')}};r.readAsText(f)}
+function resetData(){if(confirm('Reset ALL DataQuest progress?')){state={...defaultState};save();showPage('dashboard');toast('Progress reset')}}
+showPage('dashboard');updateSide();
+</script>
+</body>
+</html>
